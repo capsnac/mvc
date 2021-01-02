@@ -1,0 +1,320 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 id="header_txt">Register</h2>
+<div class="alert alert-success alert-dismissible" id="success_popup" style="display:none;">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Success!</strong> Registed succesfull, Please login to continue.
+</div>
+<div class="alert alert-danger alert-dismissible" id="error_popup" style="display:none;">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Error!</strong> Email already exist, Use diff email address.
+</div>
+
+<div class="row">
+    <span class="text-danger error-msg" id="error_msg"></span>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="form-group row">
+            <label>First Name</label>
+            <input class="form-control" type="text" id="re_fname" name="re_fname" maxlength="50" />
+        </div>
+        <div class="form-group row">
+            <label>Last Name</label>
+            <input class="form-control" type="text" id="re_lname" name="re_lname" maxlength="50" />
+        </div>
+        <div class="form-group row">
+            <label>Email</label>
+            <input class="form-control" type="email" id="re_email" name="re_email" maxlength="255" />
+        </div>
+        <div class="form-group row">
+            <label>Phone No</label>
+            <input class="form-control" type="tel" id="re_phone" name="re_phone" maxlength="10" />
+        </div>
+        <div class="form-group row">
+            <label>Address</label>
+            <input class="form-control" type="text" id="re_address" name="re_address" maxlength="100" />
+        </div>
+        <div class="form-group row">
+            <label>City</label>
+            <select class="form-control" name="re_city" id="re_city" title="select">
+                <option value="0">--select--</option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <label>State</label>
+            <select class="form-control" name="re_state" id="re_state" title="select">
+                <option value="0">--select--</option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <label>Country</label>
+            <select class="form-control" name="re_country" id="re_country" title="select">
+                <option value="0">--select--</option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <label>Password</label>
+            <input class="form-control" type="password" id="re_pass" name="re_pass" maxlength="99" />
+        </div>
+        <div class="form-group row">
+            <label>Confirm Password</label>
+            <input class="form-control" type="password" id="re_confpass" name="re_confpass" maxlength="99" />
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" id="isadminflag" value="">Is Admin</label>
+        </div>
+        <div class="form-group row">
+            <button class="form-control" onclick="registerUser();">Submit</button>
+        </div>
+        <div class="form-group row">
+            <button class="form-control" onclick="redirectToLogin();">Already Register? Login Here</button>
+        </div>
+    </div>
+    <div class="row">
+        <span class="text-danger error-msg" id="error_msg"></span>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //hide success popup
+        $("#success_popup").hide();
+
+        getCityList(); //fill city dropdown
+        getStateList(); //fill state dropdown
+        getCountryList(); //fill country dropdown
+
+        //called when key is pressed in textbox
+        $("#re_phone").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                return false;
+            }
+        });
+    });
+
+    function redirectToLogin() {
+        window.location.href = '/Home/Index';
+    }
+
+    function registerUser() {
+        var firstName = $("#re_fname").val();
+        var lastName = $("#re_lname").val();
+        var emailId = $("#re_email").val();
+        var phoneNo = $("#re_phone").val();
+        var address = $("#re_address").val();
+        var password = $("#re_pass").val();
+        var conPassword = $("#re_confpass").val();
+        var city = $("#re_city").val();
+        var state = $("#re_state").val();
+        var country = $("#re_country").val();
+
+        if (firstName.trim() == "") {
+            $(".error-msg").html("First name is required.");
+            return;
+        }
+
+        if (lastName.trim() == "") {
+            $(".error-msg").html("Last name is required.");
+            return;
+        }
+
+        if (emailId.trim() == "") {
+            $(".error-msg").html("Email is required.");
+            return;
+        } else {
+            var isValidPass = IsEmailValid(emailId.trim());
+            if (!isValidPass) {
+                $(".error-msg").html("Please enter valid email address.");
+                return;
+            }
+        }
+
+        if (phoneNo.trim() == "") {
+            $(".error-msg").html("Phone number is required.");
+            return;
+        }
+
+        if (address.trim() == "") {
+            $(".error-msg").html("Address is required.");
+            return;
+        }
+
+        if (city == "0") {
+            $(".error-msg").html("city is required.");
+            return;
+        }
+
+        if (state == "0") {
+            $(".error-msg").html("state is required.");
+            return;
+        }
+
+        if (country == "0") {
+            $(".error-msg").html("country is required.");
+            return;
+        }
+
+        if (password.trim() == "") {
+            $(".error-msg").html("Password is required.");
+            return;
+        }
+
+        if (password.trim() === conPassword.trim()) {
+            //TODO: password and confirm password are same
+        } else {
+            $(".error-msg").html("Password and confirm password are not same.");
+            return;
+        }
+
+        $(".error-msg").html("");
+
+        var isAdmin = $('#isadminflag').is(':checked');
+
+        showLoader();
+        $.ajax({
+            type: "GET",
+            url: "https://localhost:44304/api/CheckUserExist",
+            async: false,
+            data: { email: emailId.trim() },
+            datatype: "json",
+            success: function (response) {
+                if (response != null && response) {
+                    $("#error_popup").show();
+                    $('html, body').animate({
+                        scrollTop: $("#header_txt").offset().top
+                    }, 2000);
+                    hideLoader();
+                } else {
+                    $("#error_popup").hide();
+                    //submit data to API
+                    $.ajax({
+                        type: "POST",
+                        url: "https://localhost:44304/api/AddUser",
+                        async: false,
+                        data: {
+                            FirstName: firstName,
+                            LastName: lastName,
+                            Email: emailId,
+                            PhoneNumber: phoneNo,
+                            Address: address,
+                            Password: password,
+                            CityId: city,
+                            CityName: $("#re_city option:selected").text(),
+                            StateId: state,
+                            StateName: $("#re_state option:selected").text(),
+                            CountryId: country,
+                            CountryName: $("#re_country option:selected").text(),
+                            IsAdmin: isAdmin
+                        },
+                        datatype: "json",
+                        success: function (response) {
+                            $("#success_popup").show();
+                            resetForm();
+                            hideLoader();
+                        },
+                        failure: function (response) {
+                            hideLoader();
+                        },
+                        error: function (response) {
+                            hideLoader();
+                        }
+                    });
+                }
+            },
+            failure: function (response) {
+                hideLoader();
+            },
+            error: function (response) {
+                hideLoader();
+            }
+        });
+    };
+
+    //fill city dropdown
+    function getCityList() {
+        $.ajax({
+            type: "GET",
+            url: "https://localhost:44304/api/GetCityList",
+            async: false,
+            datatype: "json",
+            success: function (response) {
+                if (response != null && response.length > 0) {
+                    //add new options into drop down
+                    for (var i = 0; i < response.length; i++) {
+                        $('#re_city').append('<option value="' + response[i].CityId + '">' + response[i].CityName + '</option>');
+                    }
+                }
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+            }
+        });
+    };
+
+    //fill state dropdown
+    function getStateList() {
+        $.ajax({
+            type: "GET",
+            url: "https://localhost:44304/api/GetStateList",
+            async: false,
+            datatype: "json",
+            success: function (response) {
+                if (response != null && response.length > 0) {
+                    //add new options into drop down
+                    for (var i = 0; i < response.length; i++) {
+                        $('#re_state').append('<option value="' + response[i].StateId + '">' + response[i].StateName + '</option>');
+                    }
+                }
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+            }
+        });
+    };
+
+    //fill country dropdown
+    function getCountryList() {
+        $.ajax({
+            type: "GET",
+            url: "https://localhost:44304/api/GetCountryList",
+            async: false,
+            datatype: "json",
+            success: function (response) {
+                if (response != null && response.length > 0) {
+                    //add new options into drop down
+                    for (var i = 0; i < response.length; i++) {
+                        $('#re_country').append('<option value="' + response[i].CountryId + '">' + response[i].CountryName + '</option>');
+                    }
+                }
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+            }
+        });
+    };
+
+    function resetForm() {
+        $("#re_fname").val("");
+        $("#re_lname").val("");
+        $("#re_email").val("");
+        $("#re_phone").val("");
+        $("#re_address").val("");
+        $("#re_pass").val("");
+        $("#re_confpass").val("");
+        $("#re_city").val(0);
+        $("#re_state").val(0);
+        $("#re_country").val(0);
+    };
+</script>
+
+

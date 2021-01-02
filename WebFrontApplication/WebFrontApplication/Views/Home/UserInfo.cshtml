@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "UserInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <button class="form-control" onclick="doSignOut();">sign-out</button>
+    </div>
+</div>
+
+<h2>UserInfo</h2>
+
+<div class="container">
+    <div class="row">
+        <span id="user_info"></span>
+    </div>
+</div>
+
+<script>
+    var str = "";
+    $(function () {
+        var email = localStorage.getItem("useremail");
+        var status = localStorage.getItem("isactive");
+
+        $("#user_info").html("user with email => " + email + " , status => " + status);
+    });
+
+    function doSignOut() {
+        localStorage.setItem("strKey", "");
+        window.location.href = '/Home/Index';
+    };
+</script>
+

@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "AdminHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <button class="form-control" onclick="doSignOut();">sign-out</button>
+    </div>
+</div>
+
+<h2>AdminHome</h2>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="table_data">
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var accesstoken;
+    $(function () {
+        accesstoken = localStorage.getItem("strKey");
+        if (accesstoken != undefined && accesstoken != null && accesstoken != "") {
+            getUserList();
+        }
+        else {
+            window.location.href = '/Home/Index';
+        }
+    });
+
+    function getUserList() {
+        showLoader();
+        accesstoken = localStorage.getItem("strKey");
+        $.ajax({
+            type: "GET",
+            url: "https://localhost:44304/api/GetUserList",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + accesstoken,
+            },
+            data: {},
+            async: false,
+            datatype: "json",
+            success: function (response) {
+                hideLoader();
+                var tblStr = "";
+                if (response != null && response.status == true && response.data != null && response.data.length > 0) {
+                    response.data.map(function (detail) {
+                        tblStr += '<tr>';
+                        tblStr += '     <td>' + detail.FirstName + '</td>';
+                        tblStr += '     <td>' + detail.LastName + '</td>';
+                        tblStr += '     <td>' + detail.Email + '</td>';
+                        tblStr += '     <td>' + detail.PhoneNumber + '</td>';
+                        tblStr += '     <td>' + detail.FullAddress + '</td>';
+                        if (detail.IsActive) {
+                            tblStr += '     <td><button class="active" onclick="updateUserStatus(' + "'" + detail.UserId + "'" + ', false);">Deactive</button></td>';
+                        } else {
+                            tblStr += '     <td><button class="active" onclick="updateUserStatus(' + "'" + detail.UserId + "'" + ', true);">active</button></td>';
+                        }
+                        tblStr += '</tr>';
+                    });
+                    $("#table_data").html(tblStr);
+                }
+            },
+            failure: function (response) {
+                hideLoader();
+            },
+            error: function (response) {
+                hideLoader();
+            }
+        });
+    }
+
+    function doSignOut() {
+        localStorage.setItem("strKey", "");
+        window.location.href = '/Home/Index';
+    };
+
+    function updateUserStatus(userid, status) {
+        var r = confirm("Are you sure want to update status?");
+        if (r == true) {
+            showLoader();
+            $.ajax({
+                type: "POST",
+                url: "https://localhost:44304/api/UpdateUserStatus",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + accesstoken,
+                },
+                data: { UserId: userid, IsActive: status },
+                async: false,
+                datatype: "json",
+                success: function (response) {
+                    hideLoader();
+                    getUserList();
+                },
+                failure: function (response) {
+                    hideLoader();
+                },
+                error: function (response) {
+                    hideLoader();
+                }
+            });
+        } else {
+
+        }
+    }
+</script>

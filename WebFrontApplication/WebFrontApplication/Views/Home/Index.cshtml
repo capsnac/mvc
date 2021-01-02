@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="form-group row">
+            <label>Email</label>
+            <input class="form-control" type="email" id="login_email" name="login_email" maxlength="255" />
+        </div>
+        <div class="form-group row">
+            <label>Password</label>
+            <input class="form-control" type="password" id="login_password" name="login_email" maxlength="99" />
+        </div>
+        <div class="form-group row">
+            <button class="form-control" onclick="doLogin();">Login</button>
+        </div>
+        <div class="form-group row">
+            <button class="form-control" onclick="registerRedirect();">Don't have account? Register Here</button>
+        </div>
+    </div>
+    <div class="row">
+        <span class="text-danger" id="error_msg"></span>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        restLogin();
+    });
+
+    function restLogin() {
+        $("#login_email").val("");
+        $("#login_password").val("");
+    }
+
+    function doLogin() {
+        var emailId = $("#login_email").val();
+        var password = $("#login_password").val();
+        if (emailId.trim() == "") {
+            $("#error_msg").html("Email is required.");
+            return;
+        } else {
+            var isValidPass = IsEmailValid(emailId.trim());
+            if (!isValidPass) {
+                $("#error_msg").html("Please enter valid email address.");
+                return;
+            }
+        }
+
+        if (password.trim() == "") {
+            $("#error_msg").html("Password is required.");
+            return;
+        }
+
+        $("#error_msg").html("");
+
+        showLoader();
+        $.ajax({
+            url: "https://localhost:44304/oauth/token",
+            method: "POST",
+            async: false,
+            timeout: 0,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: {
+                "username": emailId.trim(),
+                "password": password.trim(),
+                "grant_type": "password"
+            },
+            datatype: "json",
+            success: function (response) {
+                hideLoader();
+                if (response != null) {
+                    restLogin();
+                    if (response.access_token != undefined && response.access_token != "") {
+                        localStorage.setItem("strKey", response.access_token);
+                        localStorage.setItem("isactive", response.isactive);
+                        localStorage.setItem("useremail", response.userName);
+
+                        if (response.isadmin == "true") {
+                            window.location.href = '/Home/AdminHome';
+                        } else {
+                            window.location.href = '/Home/UserInfo';
+                        }
+                    } else {
+                        $("#error_msg").html("invalid password or email.");
+                    }
+                } else {
+                    $("#error_msg").html("Something went wrong, please try again.");
+                }
+            },
+            failure: function (response) {
+                hideLoader();
+            },
+            error: function (response) {
+                hideLoader();
+            }
+        });
+    };
+
+    function registerRedirect() {
+        window.location.href = '/Home/Register';
+    };
+</script>
