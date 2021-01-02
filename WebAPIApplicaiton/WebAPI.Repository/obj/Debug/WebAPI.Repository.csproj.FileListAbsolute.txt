@@ -1,0 +1,17 @@
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Repository.dll.config
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Repository.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Repository.pdb
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\EntityFramework.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\EntityFramework.SqlServer.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Data.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Model.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Data.pdb
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Data.dll.config
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\WebAPI.Model.pdb
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\EntityFramework.xml
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\bin\Debug\EntityFramework.SqlServer.xml
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\obj\Debug\WebAPI.Repository.csprojAssemblyReference.cache
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\obj\Debug\WebAPI.Repository.csproj.CoreCompileInputs.cache
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\obj\Debug\WebAPI.Repository.csproj.CopyComplete
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\obj\Debug\WebAPI.Repository.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Repository\obj\Debug\WebAPI.Repository.pdb

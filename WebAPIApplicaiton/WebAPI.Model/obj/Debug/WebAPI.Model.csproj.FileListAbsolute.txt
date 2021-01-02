@@ -1,0 +1,6 @@
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Model\bin\Debug\WebAPI.Model.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Model\bin\Debug\WebAPI.Model.pdb
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Model\obj\Debug\WebAPI.Model.csprojAssemblyReference.cache
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Model\obj\Debug\WebAPI.Model.csproj.CoreCompileInputs.cache
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Model\obj\Debug\WebAPI.Model.dll
+F:\Capsnac.One\DemoProj\_RLogicalPractical\WebAPIApplicaiton\WebAPI.Model\obj\Debug\WebAPI.Model.pdb
